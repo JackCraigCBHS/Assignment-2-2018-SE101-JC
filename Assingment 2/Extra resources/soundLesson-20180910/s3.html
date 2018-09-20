@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<input type="button" id="btnPop" value="pop"/>
+<input type="button" id="btnShutUp" value="shut up!"/>
+
+<audio id="sndPop">
+ <source src="pop.wav" type="audio/wav" />
+Your browser does not support the audio element.
+</audio>
+
+<audio id="sndDrum"  autoplay loop>
+ <source src="DrumMachine.mp3" type="audio/mp3" />
+Your browser does not support the audio element.
+</audio>
+
+<script>
+var sndPop = document.getElementById('sndPop')
+var sndDrums = document.getElementById('sndDrum')
+var btnPop = document.getElementById('btnPop')
+var btnShutUp = document.getElementById('btnShutUp')
+
+var playPop = function ( event ) {
+  sndPop.play()
+}
+btnPop.addEventListener('click', playPop, false );
+
+var shutUp = function ( event ) {
+  console.log('shut up')
+  sndDrums.pause()
+}
+
+btnShutUp.addEventListener('click', shutUp, false )
+
+var startToPlay = function () {
+  console.log('start')
+  sndDrums.play()
+}
+
+</script>
+</body>
+</html>

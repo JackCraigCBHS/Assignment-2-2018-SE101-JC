@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+<input type="button" id="btnPop" value="pop"/>
+<input type="button" id="btnShutUp" value="shut up!"/>
+
+<script>
+var sndPop = new Audio('pop.wav')
+var sndDrums = document.createElement('audio')
+sndDrums.src = 'DrumMachine.mp3'
+sndDrums.loop = true
+sndDrums.play()
+
+var btnPop = document.getElementById('btnPop')
+var btnShutUp = document.getElementById('btnShutUp')
+
+var playPop = function ( event ) {
+  sndPop.play()
+}
+btnPop.addEventListener('click', playPop, false )
+
+var shutUp = function ( event ) {
+  sndDrums.pause()
+}
+
+btnShutUp.addEventListener('click', shutUp, false )
+</script>
+</body>
+</html>
