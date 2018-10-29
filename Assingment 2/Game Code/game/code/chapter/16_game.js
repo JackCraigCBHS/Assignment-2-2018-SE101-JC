@@ -331,10 +331,14 @@ function runLevel(level, Display) {
   let display = new Display(document.body, level);
   let state = State.start(level);
   let ending = 1;
+  display.startTimer()
+  
   return new Promise(resolve => {
     runAnimation(time => {
       state = state.update(time, arrowKeys);
       display.setState(state);
+      display.state = state
+      display.drawTime()
       if (state.status == "playing") {
         return true;
       } else if (ending > 0) {
@@ -347,7 +351,8 @@ function runLevel(level, Display) {
       }
     });
   });
-}
+
+  }
 
 async function runGame(plans, Display) {
   for (let level = 0; level < plans.length;) {
@@ -357,3 +362,6 @@ async function runGame(plans, Display) {
   }
   console.log("You've won!");
 }
+
+
+

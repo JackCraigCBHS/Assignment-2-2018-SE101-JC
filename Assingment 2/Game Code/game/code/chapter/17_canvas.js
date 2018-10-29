@@ -18,6 +18,7 @@ var CanvasDisplay = class CanvasDisplay {
     this.canvas.height = Math.min(450, level.height * scale);
     parent.appendChild(this.canvas);
     this.cx = this.canvas.getContext("2d");
+    this.currentTime = 180
 
     this.flipPlayer = false;
 
@@ -26,12 +27,27 @@ var CanvasDisplay = class CanvasDisplay {
       top: 0,
       width: this.canvas.width / scale,
       height: this.canvas.height / scale
+
     };
   }
 
   clear() {
     this.canvas.remove();
   }
+
+  startTimer () {
+  this.timer = setInterval(this.decrementTime.bind(this), 1000)
+}
+
+decrementTime () {
+  this.currentTime = this.currentTime - 1
+
+  if (this.currentTime === 0) {
+    clearInterval(this.timer)
+    this.state.status = 'lost'
+    this.setState(this.state)
+  }
+}
 }
 
 CanvasDisplay.prototype.setState = function(state) {
@@ -40,6 +56,10 @@ CanvasDisplay.prototype.setState = function(state) {
   this.drawBackground(state.level);
   this.drawActors(state.actors);
 };
+
+
+
+
 
 CanvasDisplay.prototype.updateViewport = function(state) {
   let view = this.viewport, margin = view.width / 3;
@@ -64,11 +84,30 @@ CanvasDisplay.prototype.clearDisplay = function(status) {
   var img = new Image()
   img.src = "img/background.png";
 
+  var imgdeath = new Image()
+  imgdeath.src = "img/backgrounddeath.png";
+
+  var imgwin = new Image()
+  img.src = "img/backgroundwin.png";
+
+
   if (status == "won") {
-    this.cx.fillStyle = "rgb(68, 191, 255)";
+    let imgwin = document.createElement("img");
+    imgwin.src = "img/backgroundwin.png";
+
+    var pat = this.cx.createPattern(imgwin, 'repeat-y');
+    this.cx.fillStyle = pat;
+
   } else if (status == "lost") {
-    this.cx.fillStyle = "rgb(44, 136, 214)";
+
+    let imgdeath = document.createElement("img");
+    imgdeath.src = "img/backgrounddeath.png";
+
+    var pat = this.cx.createPattern(imgdeath, 'repeat-y');
+    this.cx.fillStyle = pat;
+
   } else {
+
     let img = document.createElement("img");
     img.src = "img/background.png";
 
@@ -83,6 +122,16 @@ CanvasDisplay.prototype.clearDisplay = function(status) {
 
 var otherSprites = document.createElement("img");
 otherSprites.src = "img/sprites.png";
+
+CanvasDisplay.prototype.drawTime = function () {
+  this.cx.fillStyle = 'white'
+  this.cx.fillRect(0, 0, 80, 40)
+  this.cx.stroke()
+  this.cx.fillStyle = 'black'
+  this.cx.fillText('Time Left: ' + this.currentTime, 5, 30)
+  this.cx.rect(-5,-5,85,45)
+}
+
 
 CanvasDisplay.prototype.drawBackground = function(level) {
   let {left, top, width, height} = this.viewport;
